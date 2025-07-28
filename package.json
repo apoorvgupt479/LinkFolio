@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@sparticuz/chromium": "^138.0.2",
+    "mammoth": "^1.9.1",
     "next": "15.4.4",
+    "pdf-parse": "^1.1.1",
     "puppeteer-core": "^24.15.0",
     "react": "19.1.0",
     "react-dom": "19.1.0"
@@ -19,6 +21,7 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
