@@ -9,6 +9,7 @@ export default function Home() {
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [useQualityModel, setUseQualityModel] = useState<boolean>(false); // true for 2.5 (quality), false for 2.0 (speed)
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -46,7 +47,8 @@ export default function Home() {
               mimeType: resumeFile.type,
             },
           },
-          userPrompt: stylePrompt
+          userPrompt: stylePrompt,
+          useQualityModel: useQualityModel, // Pass the model selection
         }),
       });
 
@@ -101,17 +103,43 @@ export default function Home() {
               onChange={(e) => setStylePrompt(e.target.value)}
               placeholder="e.g., 'A minimalist, dark-themed portfolio with subtle animations and a focus on project showcases.'"
               rows={5}
-              className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white resize-none"
               required
             />
           </div>
 
+          <div className="flex items-center justify-between">
+            <label htmlFor="model-toggle" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Model Preference: {useQualityModel ? "Quality (2.5 Flash)" : "Speed (2.0 Flash)"}
+            </label>
+            <label htmlFor="model-toggle" className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                id="model-toggle"
+                className="sr-only peer"
+                checked={useQualityModel}
+                onChange={(e) => setUseQualityModel(e.target.checked)}
+              />
+              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+
           <button
             type="submit"
-            className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             disabled={loading || !resumeFile || !stylePrompt}
           >
-            {loading ? "Generating… This may take a few minutes." : "Generate Portfolio"}
+            {loading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {`Generating… This may take a few ${useQualityModel ? "minutes" : "seconds"}.`}
+              </>
+            ) : (
+              "Generate Portfolio"
+            )}
           </button>
         </form>
 
@@ -161,7 +189,6 @@ export default function Home() {
         )}
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        {/* Original footer content can remain or be simplified */}
         Made with ❤️ by Apoorv • Powered by Next.js
       </footer>
     </div>

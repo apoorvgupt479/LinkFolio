@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { resumeContent, userPrompt } = await req.json();
+    const { resumeContent, userPrompt, useQualityModel } = await req.json();
 
-    if (!resumeContent || !userPrompt) {
+    if (!resumeContent || !userPrompt || typeof useQualityModel === 'undefined') {
       return NextResponse.json({ error: 'Missing resume content or user prompt.' }, { status: 400 });
     }
 
@@ -53,8 +53,10 @@ Strict guidelines:
       ],
     };
 
+    const modelName = useQualityModel ? 'gemini-2.5-flash' : 'gemini-2.0-flash'; // Use 2.5-flash for quality, 1.5-flash for speed
+
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiApiKey}`,
       {
         method: 'POST',
         headers: {

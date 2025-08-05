@@ -1,6 +1,6 @@
 # LinkFolio
 
-This is a [Next.js](https://nextjs.org) project designed to help users generate a personalized portfolio website from their resume and a custom prompt. It leverages the Gemini API for content generation.
+This is a [Next.js](https://nextjs.org) project designed to help users generate a personalized portfolio website from their resume and a custom prompt. It leverages the Gemini API for content generation. The 
 
 ## Features
 
